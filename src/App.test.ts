@@ -1,5 +1,5 @@
 import App from "./App";
-import {instance, mock, verify} from "ts-mockito";
+import {instance, mock, reset, verify} from "ts-mockito";
 import SteeringService from "./steering/SteeringService";
 
 describe("Mars rover", () => {
@@ -13,13 +13,21 @@ describe("Mars rover", () => {
         });
     });
     describe("unit test", () => {
+        const steeringServiceMock = mock(SteeringService);
+        const app = new App(instance(steeringServiceMock));
+
+        beforeEach(() => {
+            reset(steeringServiceMock);
+        });
+
         it("should turn right when 'R' is received", () => {
-            const steeringServiceMock = mock(SteeringService);
-            const app = new App(instance(steeringServiceMock));
-
             app.start('0 0', 'N', ['R']);
+            verify(steeringServiceMock.turnRight('N')).once();
+        });
 
-            verify(steeringServiceMock.turnRight('N')).called();
+        it("should turn right when 'L' is received", () => {
+            app.start('0 0', 'N', ['L']);
+            verify(steeringServiceMock.turnLeft('N')).once();
         });
     });
 });
