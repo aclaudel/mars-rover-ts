@@ -19,11 +19,16 @@ export default class App {
     start(initialPosition: Position, commands: Commands): Position {
         let currentOrientation = initialPosition.orientation;
 
-        for(const command in commands) {
-            if(commands[0] === 'R')
-                currentOrientation = this.steeringService.turnRight(currentOrientation);
-            else
-                currentOrientation = this.steeringService.turnLeft(currentOrientation);
+        for (let i = 0; i < commands.length; i++) {
+            switch (commands[i]) {
+                case 'R':
+                    currentOrientation = this.steeringService.turnRight(currentOrientation);
+                    break;
+                case 'L':
+                    currentOrientation = this.steeringService.turnLeft(currentOrientation);
+                    break;
+                default: throw new Error('not implemented');
+            }
         }
 
         return {
