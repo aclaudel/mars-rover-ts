@@ -8,12 +8,14 @@ export default class EngineService {
         const y = parseInt(tokens[1]);
 
         switch (orientation) {
-            case "E": return this.format(x+1, y);
-            default: return this.format(x, y+1);
+            case "E": return EngineService.format(x+1, y);
+            case "S": return EngineService.format(x, y-1);
+            case "W": return EngineService.format(x-1, y);
+            case "N": return EngineService.format(x, y+1);
         }
     }
 
-    private format(x, y) {
+    private static format(x, y) {
         return `${x} ${y}`;
     }
 }
