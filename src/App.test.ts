@@ -65,5 +65,21 @@ describe("Mars rover", () => {
 
             expect(finalPosition.orientation).toBe(finalOrientation);
         });
+
+        it("should be able to turn right and left", () => {
+            const intermediateOrientation = 'E';
+            const finalOrientation = 'N';
+            when(steeringServiceMock.turnRight(initalOrientation))
+                .thenReturn(intermediateOrientation);
+            when(steeringServiceMock.turnLeft(intermediateOrientation))
+                .thenReturn(finalOrientation);
+
+            const finalPosition = app.start(initialPosition, ['R', 'L']);
+
+            verify(steeringServiceMock.turnRight(initalOrientation)).once();
+            verify(steeringServiceMock.turnLeft(intermediateOrientation)).once();
+
+            expect(finalPosition.orientation).toBe(finalOrientation);
+        });
     });
 });
