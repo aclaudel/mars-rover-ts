@@ -26,26 +26,23 @@ export default class App {
 
         for (let i = 0; i < commands.length; i++) {
             const command = commands[i];
-            if (command === "M") {
-                currentCoordinates = this.engineService.move(currentCoordinates, currentOrientation);
-            } else {
-                currentOrientation = this.getNextOrientation(currentOrientation, command);
+            switch (command) {
+                case "M":
+                    currentCoordinates = this.engineService.move(currentCoordinates, currentOrientation);
+                    break;
+                case 'R':
+                    currentOrientation = this.steeringService.turnRight(currentOrientation);
+                    break;
+                case 'L':
+                    currentOrientation = this.steeringService.turnLeft(currentOrientation);
+                    break;
             }
-        }
+    }
 
         return {
             coordinates: currentCoordinates,
             orientation: currentOrientation
         };
-    }
-
-    private getNextOrientation(currentOrientation: Orientation, command: Turn): Orientation {
-        switch (command) {
-            case 'R':
-                return this.steeringService.turnRight(currentOrientation);
-            case 'L':
-                return this.steeringService.turnLeft(currentOrientation);
-        }
     }
 }
 
