@@ -1,4 +1,4 @@
-import App, {Position} from "./App";
+import App, {Orientation, Position} from "./App";
 import {instance, mock, reset, verify, when} from "ts-mockito";
 import SteeringService from "./steering/SteeringService";
 
@@ -28,10 +28,19 @@ describe("Mars rover", () => {
             reset(steeringServiceMock);
         });
 
+        function setup_turn_right_of_steering_service(currentOrientation: Orientation, nextOrientation: Orientation) {
+            when(steeringServiceMock.turnRight(currentOrientation))
+                .thenReturn(nextOrientation);
+        }
+
+        function setup_turn_left_of_steering_service(currentOrientation: Orientation, nextOrientation: Orientation) {
+            when(steeringServiceMock.turnLeft(currentOrientation))
+                .thenReturn(nextOrientation);
+        }
+
         it("should turn right when 'R' is received", () => {
             const nextOrientation = 'E';
-            when(steeringServiceMock.turnRight(initalOrientation))
-                .thenReturn(nextOrientation);
+            setup_turn_right_of_steering_service(initalOrientation, nextOrientation);
 
             const finalPosition = app.start(initialPosition, ['R']);
 
@@ -41,8 +50,7 @@ describe("Mars rover", () => {
 
         it("should turn right when 'L' is received", () => {
             const nextOrientation = 'W';
-            when(steeringServiceMock.turnLeft(initalOrientation))
-                .thenReturn(nextOrientation);
+            setup_turn_left_of_steering_service(initalOrientation, nextOrientation);
 
             const finalPosition = app.start(initialPosition, ['L']);
 
@@ -53,8 +61,9 @@ describe("Mars rover", () => {
         it("should be able to turn right multiple times", () => {
             const intermediateOrientation = 'E';
             const finalOrientation = 'S';
-            when(steeringServiceMock.turnRight(initalOrientation))
-                .thenReturn(intermediateOrientation);
+            setup_turn_right_of_steering_service(initalOrientation, intermediateOrientation);
+            setup_turn_right_of_steering_service(intermediateOrientation, finalOrientation);
+
             when(steeringServiceMock.turnRight(intermediateOrientation))
                 .thenReturn(finalOrientation);
 
@@ -69,10 +78,8 @@ describe("Mars rover", () => {
         it("should be able to turn right and left", () => {
             const intermediateOrientation = 'E';
             const finalOrientation = 'N';
-            when(steeringServiceMock.turnRight(initalOrientation))
-                .thenReturn(intermediateOrientation);
-            when(steeringServiceMock.turnLeft(intermediateOrientation))
-                .thenReturn(finalOrientation);
+            setup_turn_right_of_steering_service(initalOrientation, intermediateOrientation);
+            setup_turn_left_of_steering_service(intermediateOrientation, finalOrientation);
 
             const finalPosition = app.start(initialPosition, ['R', 'L']);
 
