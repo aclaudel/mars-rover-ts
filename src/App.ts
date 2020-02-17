@@ -16,11 +16,18 @@ export default class App {
         this.steeringService = steeringService;
     }
 
-    start(
-        initialPosition: Position,
-        commands: Commands) {
-        this.steeringService.turnRight('N');
-        this.steeringService.turnLeft('N');
+    start(initialPosition: Position, commands: Commands): Position {
+        let nextOrientation: Orientation;
+
+        if(commands[0] === 'R')
+            nextOrientation = this.steeringService.turnRight('N');
+        else
+            nextOrientation = this.steeringService.turnLeft('N');
+
+        return {
+            ...initialPosition,
+            orientation: nextOrientation
+        };
     }
 }
 

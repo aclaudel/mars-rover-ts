@@ -1,5 +1,5 @@
 import App, {Position} from "./App";
-import {instance, mock, reset, verify} from "ts-mockito";
+import {instance, mock, reset, verify, when} from "ts-mockito";
 import SteeringService from "./steering/SteeringService";
 
 describe("Mars rover", () => {
@@ -28,13 +28,25 @@ describe("Mars rover", () => {
         });
 
         it("should turn right when 'R' is received", () => {
-            app.start(initialPosition, ['R']);
+            const nextOrientation = 'E';
+            when(steeringServiceMock.turnRight('N'))
+                .thenReturn(nextOrientation);
+
+            const finalPosition = app.start(initialPosition, ['R']);
+
             verify(steeringServiceMock.turnRight('N')).once();
+            expect(finalPosition.orientation).toBe(nextOrientation);
         });
 
         it("should turn right when 'L' is received", () => {
-            app.start(initialPosition, ['L']);
+            const nextOrientation = 'W';
+            when(steeringServiceMock.turnLeft('N'))
+                .thenReturn(nextOrientation);
+
+            const finalPosition = app.start(initialPosition, ['L']);
+
             verify(steeringServiceMock.turnLeft('N')).once();
+            expect(finalPosition.orientation).toBe(nextOrientation);
         });
     });
 });
