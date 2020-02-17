@@ -73,15 +73,18 @@ describe("Mars rover", () => {
         });
 
         it("should be able to turn right and left", () => {
-            const intermediateOrientation = 'E';
-            const finalOrientation = 'N';
-            setup_turn_right_of_steering_service(initalOrientation, intermediateOrientation);
-            setup_turn_left_of_steering_service(intermediateOrientation, finalOrientation);
+            const intermediateOrientation1 = 'E';
+            const intermediateOrientation2 = 'W';
+            const finalOrientation = 'S';
+            setup_turn_right_of_steering_service(initalOrientation, intermediateOrientation1);
+            setup_turn_left_of_steering_service(intermediateOrientation1, intermediateOrientation2);
+            setup_turn_right_of_steering_service(intermediateOrientation2, finalOrientation);
 
-            const finalPosition = app.start(initialPosition, ['R', 'L']);
+            const finalPosition = app.start(initialPosition, ['R', 'L', 'R']);
 
             verify(steeringServiceMock.turnRight(initalOrientation)).once();
-            verify(steeringServiceMock.turnLeft(intermediateOrientation)).once();
+            verify(steeringServiceMock.turnLeft(intermediateOrientation1)).once();
+            verify(steeringServiceMock.turnRight(intermediateOrientation2)).once();
 
             expect(finalPosition.orientation).toBe(finalOrientation);
         });
