@@ -13,9 +13,11 @@ describe("Mars rover", () => {
             };
             const finalLocation = app.start(initialPosition, ['M', 'R', 'M']);
 
-            expect(finalLocation).toBe('1 1 E');
+            expect(finalLocation.orientation).toBe('E');
+            expect(finalLocation.coordinates).toBe('1 1');
         });
     });
+
     describe("unit test", () => {
         const steeringServiceMock = mock(SteeringService);
         const engineServiceMock = mock(EngineService);
