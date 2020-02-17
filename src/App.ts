@@ -1,6 +1,7 @@
 import SteeringService from "./steering/SteeringService";
 
-export type Command = 'M' | 'R' | 'L';
+export type Turn = 'R' | 'L';
+export type Command = 'M' | Turn;
 export type Commands = Command[];
 export type Orientation = 'N' | 'E' | 'W' | 'S';
 
@@ -20,7 +21,11 @@ export default class App {
         let currentOrientation = initialPosition.orientation;
 
         for (let i = 0; i < commands.length; i++) {
-            currentOrientation = this.getNextOrientation(currentOrientation, commands[i]);
+            const command = commands[i];
+            switch (command) {
+                case "M": throw new Error('not yet implemented');
+                default: currentOrientation = this.getNextOrientation(currentOrientation, command);
+            }
         }
 
         return {
@@ -29,13 +34,12 @@ export default class App {
         };
     }
 
-    private getNextOrientation(currentOrientation: Orientation, command: Command) {
+    private getNextOrientation(currentOrientation: Orientation, command: Turn) {
         switch (command) {
             case 'R':
                 return this.steeringService.turnRight(currentOrientation);
             case 'L':
                 return this.steeringService.turnLeft(currentOrientation);
-            default: throw new Error('not implemented');
         }
     }
 }
