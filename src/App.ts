@@ -20,21 +20,23 @@ export default class App {
         let currentOrientation = initialPosition.orientation;
 
         for (let i = 0; i < commands.length; i++) {
-            switch (commands[i]) {
-                case 'R':
-                    currentOrientation = this.steeringService.turnRight(currentOrientation);
-                    break;
-                case 'L':
-                    currentOrientation = this.steeringService.turnLeft(currentOrientation);
-                    break;
-                default: throw new Error('not implemented');
-            }
+            currentOrientation = this.getNextOrientation(currentOrientation, commands[i]);
         }
 
         return {
             ...initialPosition,
             orientation: currentOrientation
         };
+    }
+
+    private getNextOrientation(currentOrientation: Orientation, command: Command) {
+        switch (command) {
+            case 'R':
+                return this.steeringService.turnRight(currentOrientation);
+            case 'L':
+                return this.steeringService.turnLeft(currentOrientation);
+            default: throw new Error('not implemented');
+        }
     }
 }
 
