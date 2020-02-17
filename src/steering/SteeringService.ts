@@ -1,4 +1,4 @@
-export type Orientation = 'N' | 'E' | 'W' | 'S';
+import {Orientation} from "../App";
 
 export default class SteeringService {
 
