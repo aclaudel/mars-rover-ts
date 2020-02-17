@@ -1,4 +1,5 @@
 import SteeringService from "./steering/SteeringService";
+import EngineService from "./engine/EngineService";
 
 export type Turn = 'R' | 'L';
 export type Command = 'M' | Turn;
@@ -11,30 +12,34 @@ export type Position = {
 }
 
 export default class App {
-    steeringService: SteeringService;
+    private steeringService: SteeringService;
+    private engineService: EngineService;
 
-    constructor(steeringService: SteeringService) {
+    constructor(steeringService: SteeringService, engineService: EngineService) {
         this.steeringService = steeringService;
+        this.engineService = engineService;
     }
 
     start(initialPosition: Position, commands: Commands): Position {
         let currentOrientation = initialPosition.orientation;
+        let currentCoordinates = initialPosition.coordinates;
 
         for (let i = 0; i < commands.length; i++) {
             const command = commands[i];
-            switch (command) {
-                case "M": throw new Error('not yet implemented');
-                default: currentOrientation = this.getNextOrientation(currentOrientation, command);
+            if (command === "M") {
+                currentCoordinates = this.engineService.move(initialPosition.coordinates);
+            } else {
+                currentOrientation = this.getNextOrientation(currentOrientation, command);
             }
         }
 
         return {
-            ...initialPosition,
+            coordinates: currentCoordinates,
             orientation: currentOrientation
         };
     }
 
-    private getNextOrientation(currentOrientation: Orientation, command: Turn) {
+    private getNextOrientation(currentOrientation: Orientation, command: Turn): Orientation {
         switch (command) {
             case 'R':
                 return this.steeringService.turnRight(currentOrientation);
