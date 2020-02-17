@@ -64,9 +64,6 @@ describe("Mars rover", () => {
             setup_turn_right_of_steering_service(initalOrientation, intermediateOrientation);
             setup_turn_right_of_steering_service(intermediateOrientation, finalOrientation);
 
-            when(steeringServiceMock.turnRight(intermediateOrientation))
-                .thenReturn(finalOrientation);
-
             const finalPosition = app.start(initialPosition, ['R', 'R']);
 
             verify(steeringServiceMock.turnRight(initalOrientation)).once();
