@@ -12,6 +12,7 @@
     "ts-mockito": "^2.5.0"
   },
   "scripts": {
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "test": "jest"
   }
 }
