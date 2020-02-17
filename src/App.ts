@@ -27,7 +27,7 @@ export default class App {
         for (let i = 0; i < commands.length; i++) {
             const command = commands[i];
             if (command === "M") {
-                currentCoordinates = this.engineService.move(initialPosition.coordinates);
+                currentCoordinates = this.engineService.move(currentCoordinates, currentOrientation);
             } else {
                 currentOrientation = this.getNextOrientation(currentOrientation, command);
             }

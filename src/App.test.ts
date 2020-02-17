@@ -96,12 +96,12 @@ describe("Mars rover", () => {
         describe("moving feature", () => {
             it("should move forward when 'M' command is received", () => {
                 const finalCoordinates = '1 0';
-                when(engineServiceMock.move(initialPosition.coordinates))
+                when(engineServiceMock.move(initialPosition.coordinates, initialPosition.orientation))
                     .thenReturn(finalCoordinates);
 
                 const finalPosition = app.start(initialPosition, ['M']);
 
-                verify(engineServiceMock.move(initialPosition.coordinates)).called();
+                verify(engineServiceMock.move(initialPosition.coordinates, initialPosition.orientation)).called();
                 expect(finalPosition.coordinates).toBe(finalCoordinates);
             });
         });
